@@ -1,6 +1,31 @@
 {
   "project_id": "project_alpha",
-  "status": "PENDING",
-  "last_updated": "2026-05-09T00:00:00+00:00",
-  "documents": []
+  "status": "INGESTED",
+  "last_updated": "2026-05-10T14:06:53.997339+00:00",
+  "documents": [
+    {
+      "source_filename": "PO_SmartLife_Mobile_App.docx.pdf",
+      "source_hash": "1100ca69951ac65b918c299cd3c1a2fc523220834aa66ac0d1b82bbf9894faff",
+      "ingested_at": "2026-05-10T14:06:52.452382+00:00",
+      "raw_archive_path": "01_raw_archive\\PO_SmartLife_Mobile_App.docx.pdf",
+      "working_doc_path": "02_working_docs\\PO_SmartLife_Mobile_App.docx.md",
+      "status": "INGESTED"
+    },
+    {
+      "source_filename": "SmartLife_BRD_v1.0.pdf",
+      "source_hash": "1658721094ff5c86949abc4598543e96e69aab151cdc546ef6fdfb87963c212f",
+      "ingested_at": "2026-05-10T14:06:53.207713+00:00",
+      "raw_archive_path": "01_raw_archive\\SmartLife_BRD_v1.0.pdf",
+      "working_doc_path": "02_working_docs\\SmartLife_BRD_v1.0.md",
+      "status": "INGESTED"
+    },
+    {
+      "source_filename": "SmartLife_RFP.pdf",
+      "source_hash": "8ac51335ebf1aa5284a230dad595e6f255a9c7c3c7194a0bd7b1d253e3c28862",
+      "ingested_at": "2026-05-10T14:06:53.995344+00:00",
+      "raw_archive_path": "01_raw_archive\\SmartLife_RFP.pdf",
+      "working_doc_path": "02_working_docs\\SmartLife_RFP.md",
+      "status": "INGESTED"
+    }
+  ]
 }
