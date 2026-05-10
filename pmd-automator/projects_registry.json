@@ -1,0 +1,13 @@
+{
+  "projects": [
+    {
+      "id": "project_alpha",
+      "name": "Project Alpha",
+      "description": "PMO pilot — automated charter generation",
+      "lead": "TBC",
+      "start_date": "2026-05-09",
+      "due_date": "2026-12-31",
+      "status": "Initiation"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "version": "1.0",
+  "required_anchors": ["scope", "risks", "stakeholders", "deliverables"],
+  "fallback_patterns": {
+    "scope": [
+      "scope", "project scope", "statement of work",
+      "work scope", "in scope", "out of scope"
+    ],
+    "risks": [
+      "risk", "risks", "risk register", "risk assessment",
+      "risk and issues", "identified risks"
+    ],
+    "stakeholders": [
+      "stakeholder", "stakeholders", "team", "project team",
+      "contacts", "key contacts", "participants"
+    ],
+    "deliverables": [
+      "deliverable", "deliverables", "outputs", "milestones",
+      "key outputs", "project outputs"
+    ]
+  }
+}
