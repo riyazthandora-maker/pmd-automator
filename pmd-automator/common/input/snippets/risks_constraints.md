@@ -1,6 +1,6 @@
 ---
 skill: risks_constraints
-extracted_at: 2026-05-10T16:08:32.413606+00:00
+extracted_at: 2026-05-11T04:48:31.978214+00:00
 ---
 
 ## 6. Risks, Assumptions & Constraints
