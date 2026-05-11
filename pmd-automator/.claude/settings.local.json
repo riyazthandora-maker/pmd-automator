@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-Content *)",
+      "PowerShell(cd \"D:\\\\Users\\\\Riyaz\\\\Projects\\\\pmd-automator\"; $env:STREAMLIT_BROWSER_GATHER_USAGE_STATS = \"false\"; python -m streamlit run app.py)"
+    ]
+  }
+}

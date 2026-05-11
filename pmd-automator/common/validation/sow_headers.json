@@ -1,22 +1,78 @@
 {
-  "version": "1.0",
-  "required_anchors": ["scope", "risks", "stakeholders", "deliverables"],
-  "fallback_patterns": {
-    "scope": [
-      "scope", "project scope", "statement of work",
-      "work scope", "in scope", "out of scope"
-    ],
-    "risks": [
-      "risk", "risks", "risk register", "risk assessment",
-      "risk and issues", "identified risks"
-    ],
-    "stakeholders": [
-      "stakeholder", "stakeholders", "team", "project team",
-      "contacts", "key contacts", "participants"
-    ],
-    "deliverables": [
-      "deliverable", "deliverables", "outputs", "milestones",
-      "key outputs", "project outputs"
-    ]
+  "version": "2.0",
+  "description": "Validation schema for the 3-file standard input system. Each key under 'required_files' is a filename; its 'required_anchors' must be present (via explicit tag or fallback heading) for the file to pass validation.",
+  "required_files": {
+    "rfp_summary.md": {
+      "required_anchors": ["background", "evaluation_criteria"],
+      "fallback_patterns": {
+        "background": [
+          "background", "background & context", "background and context",
+          "context", "project context", "project background"
+        ],
+        "evaluation_criteria": [
+          "evaluation criteria", "evaluation", "scoring criteria",
+          "vendor criteria", "assessment criteria", "selection criteria"
+        ]
+      }
+    },
+    "business_requirements.md": {
+      "required_anchors": [
+        "business_objective",
+        "functional_requirements",
+        "non_functional_requirements",
+        "project_constraints"
+      ],
+      "fallback_patterns": {
+        "business_objective": [
+          "business objective", "business objectives", "business case",
+          "strategic objective", "purpose", "project purpose", "goals"
+        ],
+        "functional_requirements": [
+          "functional requirements", "functional requirement",
+          "feature requirements", "features", "system requirements", "fr-1"
+        ],
+        "non_functional_requirements": [
+          "non-functional requirements", "non functional requirements",
+          "nfr", "quality requirements", "performance requirements",
+          "security requirements"
+        ],
+        "project_constraints": [
+          "project constraints", "constraints", "timeline constraints",
+          "budget constraints", "limitations", "scope limitations"
+        ]
+      }
+    },
+    "purchase_order.md": {
+      "required_anchors": ["contact_information", "key_deliverables", "project_plan", "payment_terms"],
+      "fallback_patterns": {
+        "contact_information": [
+          "contact information", "contacts", "key contacts", "parties",
+          "party information", "vendor contact", "client contact"
+        ],
+        "key_deliverables": [
+          "key deliverables", "deliverables", "deliverable schedule",
+          "project deliverables", "outputs", "scope of work"
+        ],
+        "project_plan": [
+          "high-level project plan", "project plan", "work plan",
+          "project phases", "phases", "timeline", "schedule"
+        ],
+        "payment_terms": [
+          "payment terms", "payment schedule", "invoice schedule",
+          "billing milestones", "financial terms", "payments"
+        ]
+      }
+    }
+  },
+  "governance_fields": {
+    "description": "Metadata fields extracted from business_requirements.md front-matter or document header. Not anchor-based — extracted by label matching.",
+    "labels": ["Author", "Prepared By", "Stakeholder Lead", "Document Owner", "Approver"],
+    "role_mapping": {
+      "Author": "Project Manager",
+      "Prepared By": "Project Manager",
+      "Stakeholder Lead": "Project Sponsor",
+      "Document Owner": "Project Manager",
+      "Approver": "Project Sponsor"
+    }
   }
 }

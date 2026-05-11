@@ -38,10 +38,8 @@
 ## 6. Risks, Assumptions & Constraints
 ### Risks
 * Legal liability from incorrect AI health risk predictions.
-* Technical challenges with evolving wearable hardware platforms.
-
-### Assumptions
-* Product Owner (Jennifer Walsh) will provide feedback on requirements within 5 business days.
+* Technical challenges with 
+Walsh) will provide feedback on requirements within 5 business days.
 
 ### Constraints
 * Fixed budget of USD 450,000 with no contingency for out-of-scope items.
