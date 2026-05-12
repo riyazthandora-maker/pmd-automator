@@ -26,7 +26,8 @@ SCHEMA_PATH = REPO_ROOT / "common" / "validation" / "sow_headers.json"
 # ---------------------------------------------------------------------------
 INPUT_DIR   = REPO_ROOT / "common" / "input"
 OUTPUT_DIR  = REPO_ROOT / "shared_output"
-OUTPUT_FILE = OUTPUT_DIR / "Project_Charter.html"
+OUTPUT_FILE          = OUTPUT_DIR / "Project_Charter.html"
+RISK_REGISTER_FILE   = OUTPUT_DIR / "Risk_Register.html"
 
 # Suspended stages are listed here for reference only
 # SUSPENDED: ("ingestion",  "Ingestion")
@@ -135,6 +136,229 @@ def _write_snippet(snippets_dir: Path, name: str, content: str) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Risk Register — CSS, helpers, and HTML builder
+# ---------------------------------------------------------------------------
+
+_RISK_REGISTER_CSS = """
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+  font-size: 13px; color: #1a1a2e; background: #f4f6fb; line-height: 1.5;
+}
+.page {
+  max-width: 1280px; margin: 32px auto; background: #fff;
+  border-radius: 8px; box-shadow: 0 2px 16px rgba(0,0,0,.12); overflow: hidden;
+}
+header {
+  background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+  color: #fff; padding: 28px 48px 22px;
+}
+header h1 { font-size: 22px; font-weight: 700; letter-spacing: .5px; }
+header .meta { margin-top: 8px; font-size: 12px; opacity: .82; }
+header .meta span { margin-right: 24px; }
+.badge-draft {
+  display: inline-block; background: #e94560; color: #fff;
+  font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 12px;
+  text-transform: uppercase; letter-spacing: .6px; margin-left: 10px;
+  vertical-align: middle;
+}
+main { padding: 24px 32px 48px; }
+.summary {
+  display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.summary-card {
+  flex: 1; min-width: 120px; background: #f7f9fc;
+  border: 1px solid #e2e8f0; border-radius: 6px;
+  padding: 12px 16px; text-align: center;
+}
+.summary-card .count { font-size: 26px; font-weight: 700; color: #0f3460; }
+.summary-card .label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: .5px; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+thead { background: #0f3460; color: #fff; }
+thead th { padding: 10px 12px; text-align: left; font-weight: 600; white-space: nowrap; }
+tbody tr:nth-child(even) { background: #f7f9fc; }
+tbody tr:hover { background: #eef2ff; }
+tbody td { padding: 8px 12px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+.risk-id { font-weight: 700; color: #0f3460; white-space: nowrap; font-family: monospace; }
+.badge {
+  display: inline-block; color: #fff; font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 10px; text-transform: uppercase;
+  letter-spacing: .5px; white-space: nowrap;
+}
+footer {
+  background: #f8fafc; border-top: 1px solid #e2e8f0;
+  padding: 12px 32px; font-size: 11px; color: #94a3b8;
+  display: flex; justify-content: space-between;
+}
+@media print {
+  body { background: #fff; }
+  .page { box-shadow: none; margin: 0; border-radius: 0; }
+}
+"""
+
+_PRIORITY_COLOR = {
+    "Critical": "#c0392b",
+    "High":     "#e67e22",
+    "Medium":   "#f39c12",
+    "Low":      "#27ae60",
+}
+
+_SCORE_NUM = {"Low": 2, "Medium": 3, "High": 4}
+
+
+def _risk_priority(impact: str, prob: str) -> tuple[int, str]:
+    score = _SCORE_NUM.get(impact, 3) * _SCORE_NUM.get(prob, 3)
+    label = ("Critical" if score >= 12 else
+             "High"     if score >= 9  else
+             "Medium"   if score >= 6  else "Low")
+    return score, label
+
+
+def _extract_bullet_items(text: str) -> list[str]:
+    return [
+        re.sub(r'^\s*[\*\-]\s+', '', line).strip()
+        for line in text.splitlines()
+        if re.match(r'^\s*[\*\-]\s+', line)
+    ]
+
+
+def _build_risk_register_html(constraints: str, nfr: str, eval_crit: str) -> str:
+    rows: list[dict] = []
+    risk_id = 1
+
+    def add(desc: str, source: str, category: str,
+            impact: str = "Medium", prob: str = "Medium",
+            mitigation: str = "TBC") -> None:
+        nonlocal risk_id
+        score, priority = _risk_priority(impact, prob)
+        rows.append({
+            "id":         f"RISK-{risk_id:03d}",
+            "category":   category,
+            "description": desc,
+            "source":     source,
+            "impact":     impact,
+            "probability": prob,
+            "score":      score,
+            "priority":   priority,
+            "mitigation": mitigation,
+        })
+        risk_id += 1
+
+    for item in _extract_bullet_items(constraints):
+        m = re.match(r'\*{0,2}(.+?)\*{0,2}[:\s]+(.*)', item)
+        label   = m.group(1).strip() if m else ""
+        desc    = m.group(2).strip() if m else item
+        ll      = label.lower()
+        if any(k in ll for k in ["timeline", "week", "month", "deadline"]):
+            add(f"{label}: {desc}", "Project Constraints", "Schedule", "High", "High",
+                "Define realistic milestones; add buffer weeks at phase boundaries")
+        elif any(k in ll for k in ["budget", "cost", "usd", "$"]):
+            add(f"{label}: {desc}", "Project Constraints", "Budget", "High", "Medium",
+                "Track spend weekly; escalate at 80% threshold")
+        elif any(k in ll for k in ["parity", "platform", "ios", "android"]):
+            add(f"{label}: {desc}", "Project Constraints", "Technical", "Medium", "Medium",
+                "Shared business logic layer; platform-specific UI only")
+        else:
+            add(f"{label}: {desc}" if label else desc, "Project Constraints", "Other")
+
+    for item in _extract_bullet_items(nfr):
+        m = re.match(r'\*{0,2}(.+?)\*{0,2}[:\s]+(.*)', item)
+        label = m.group(1).strip() if m else ""
+        desc  = m.group(2).strip() if m else item
+        ll    = label.lower()
+        if any(k in ll for k in ["security", "auth", "jwt"]):
+            add(f"{label}: {desc}", "Non-Functional Requirements", "Compliance/Security",
+                "High", "Medium", "Enforce 80%+ test coverage gates; run SAST in CI")
+        elif any(k in ll for k in ["compliance", "encrypt", "gdpr", "hipaa"]):
+            add(f"{label}: {desc}", "Non-Functional Requirements", "Compliance/Security",
+                "High", "Low", "Implement encryption standards; conduct compliance review pre-launch")
+        elif any(k in ll for k in ["performance", "response", "latency", "api"]):
+            add(f"{label}: {desc}", "Non-Functional Requirements", "Technical",
+                "Medium", "Medium", "Load test at each milestone; set SLA thresholds in CI")
+        else:
+            add(f"{label}: {desc}" if label else desc, "Non-Functional Requirements", "Technical")
+
+    for item in _extract_bullet_items(eval_crit):
+        m = re.match(r'\*{0,2}(.+?)\*{0,2}[:\s]+(.*)', item)
+        label = m.group(1).strip() if m else ""
+        desc  = m.group(2).strip() if m else item
+        add(f"{label}: {desc}" if label else desc, "Evaluation Criteria", "Stakeholder",
+            "Medium", "Medium", "Align expectations early; schedule demo checkpoints")
+
+    generated = datetime.now(timezone.utc).strftime("%d %B %Y, %H:%M UTC")
+
+    counts = {"Critical": 0, "High": 0, "Medium": 0, "Low": 0}
+    for r in rows:
+        counts[r["priority"]] += 1
+
+    summary_html = "".join(
+        f'<div class="summary-card">'
+        f'<div class="count" style="color:{_PRIORITY_COLOR[p]}">{counts[p]}</div>'
+        f'<div class="label">{p}</div></div>'
+        for p in ("Critical", "High", "Medium", "Low")
+    )
+    summary_html = (
+        f'<div class="summary-card"><div class="count">{len(rows)}</div>'
+        f'<div class="label">Total Risks</div></div>' + summary_html
+    )
+
+    rows_html = "".join(
+        f'<tr>'
+        f'<td class="risk-id">{r["id"]}</td>'
+        f'<td>{r["category"]}</td>'
+        f'<td>{r["description"]}</td>'
+        f'<td>{r["source"]}</td>'
+        f'<td>{r["impact"]}</td>'
+        f'<td>{r["probability"]}</td>'
+        f'<td style="text-align:center;font-weight:700">{r["score"]}</td>'
+        f'<td><span class="badge" style="background:{_PRIORITY_COLOR[r["priority"]]}">'
+        f'{r["priority"]}</span></td>'
+        f'<td>{r["mitigation"]}</td>'
+        f'</tr>'
+        for r in rows
+    )
+
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>High-Level Risk Register</title>
+  <style>{_RISK_REGISTER_CSS}</style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>High-Level Risk Register<span class="badge-draft">Draft</span></h1>
+      <div class="meta">
+        <span>📋 PMO Automator</span>
+        <span>📅 {generated}</span>
+        <span>👤 Riyaz Kallayimmel, PMP</span>
+      </div>
+    </header>
+    <main>
+      <div class="summary">{summary_html}</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Risk ID</th><th>Category</th><th>Risk Description</th><th>Source</th>
+            <th>Impact</th><th>Probability</th><th>Score</th><th>Priority</th><th>Mitigation</th>
+          </tr></thead>
+          <tbody>{rows_html}</tbody>
+        </table>
+      </div>
+    </main>
+    <footer>
+      <span>PMO Automator — High-Level Risk Register (extract-risks-constraints v3)</span>
+      <span>Generated {generated}</span>
+    </footer>
+  </div>
+</body>
+</html>"""
+
+
+# ---------------------------------------------------------------------------
 # SUSPENDED — Stage 1: Ingestion (PDF → Markdown)
 # ---------------------------------------------------------------------------
 # def run_ingestion(project_root: Path, state_path: Path) -> bool:
@@ -209,6 +433,12 @@ def _skill_risks_constraints(schema: dict, snippets_dir: Path) -> tuple[str, str
         "### 6d. Assumptions\n\n- TBC — to be completed by the Project Manager.",
     ])
     _write_snippet(snippets_dir, "risks_constraints", content)
+
+    # Also produce a standalone risk register HTML
+    rr_html = _build_risk_register_html(constraints, nfr, eval_crit)
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    RISK_REGISTER_FILE.write_text(rr_html, encoding="utf-8")
+
     return "risks_constraints", content
 
 
@@ -603,10 +833,12 @@ def run_assembly() -> tuple[bool, str]:
         OUTPUT_FILE.write_text(html, encoding="utf-8")
         html_path = str(OUTPUT_FILE)
 
+        rr_path = str(RISK_REGISTER_FILE) if RISK_REGISTER_FILE.exists() else ""
+        outputs = [html_path] + ([rr_path] if rr_path else [])
         emit({"event": "stage_done", "stage": "assembly",
-              "step": step, "total": total, "outputs": [html_path], "ts": _now_iso()})
-        emit({"event": "complete", "html_path": html_path, "outputs": [html_path],
-              "ts": _now_iso()})
+              "step": step, "total": total, "outputs": outputs, "ts": _now_iso()})
+        emit({"event": "complete", "html_path": html_path,
+              "risk_register_path": rr_path, "outputs": outputs, "ts": _now_iso()})
         return True, html_path
 
     except Exception as exc:

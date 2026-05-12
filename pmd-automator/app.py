@@ -15,8 +15,9 @@ ROOT = Path(__file__).parent
 # ---------------------------------------------------------------------------
 # Centralized paths
 # ---------------------------------------------------------------------------
-INPUT_DIR   = ROOT / "common" / "input"
-OUTPUT_FILE = ROOT / "shared_output" / "Project_Charter.html"
+INPUT_DIR          = ROOT / "common" / "input"
+OUTPUT_FILE        = ROOT / "shared_output" / "Project_Charter.html"
+RISK_REGISTER_FILE = ROOT / "shared_output" / "Risk_Register.html"
 
 st.set_page_config(
     page_title="PMO Automator",
@@ -58,7 +59,7 @@ st.divider()
 
 already_running = st.session_state.get("running", False)
 
-col_btn, col_open = st.columns([2, 8])
+col_btn, col_charter, col_register = st.columns([2, 4, 4])
 
 with col_btn:
     process_clicked = st.button(
@@ -67,10 +68,15 @@ with col_btn:
         use_container_width=True,
     )
 
-with col_open:
+with col_charter:
     if OUTPUT_FILE.exists():
         if st.button("📄 Open Last Charter", use_container_width=False):
             webbrowser.open(OUTPUT_FILE.as_uri())
+
+with col_register:
+    if RISK_REGISTER_FILE.exists():
+        if st.button("📊 Open Risk Register", use_container_width=False):
+            webbrowser.open(RISK_REGISTER_FILE.as_uri())
 
 if not all_present:
     st.warning(
@@ -98,12 +104,18 @@ if "result" in st.session_state and not already_running:
 
     elif res.get("success"):
         html_path = res.get("html_path", "")
+        rr_path   = res.get("risk_register_path", "")
         st.success("✅ Charter generated successfully!")
         if html_path and Path(html_path).exists():
             c1, c2 = st.columns([5, 1])
             c1.code(html_path)
-            if c2.button("🌐 Open", key="open_cached"):
+            if c2.button("🌐 Open Charter", key="open_cached"):
                 webbrowser.open(Path(html_path).as_uri())
+        if rr_path and Path(rr_path).exists():
+            r1, r2 = st.columns([5, 1])
+            r1.code(rr_path)
+            if r2.button("📊 Open Register", key="open_rr_cached"):
+                webbrowser.open(Path(rr_path).as_uri())
     else:
         st.error(f"Processing failed (exit code {res.get('returncode', '?')}).")
 
@@ -144,7 +156,8 @@ proc = subprocess.Popen(
 
 # validation_failed = False   # SUSPENDED — validation not run
 missing_headers: list[str] = []
-html_path = ""
+html_path        = ""
+risk_register_path = ""
 
 assert proc.stdout is not None
 for raw in proc.stdout:
@@ -218,8 +231,9 @@ for raw in proc.stdout:
             html_path = evt["html_path"]
         elif "outputs" in evt:
             for o in evt["outputs"]:
-                if o.endswith(".html"):
+                if o.endswith(".html") and "Risk_Register" not in o:
                     html_path = o
+        risk_register_path = evt.get("risk_register_path", "")
         progress_bar.progress(1.0, text="✅ Complete!")
         status_box.success("Charter generated!")
 
@@ -238,17 +252,28 @@ if stderr_out.strip():
 st.session_state["running"] = False
 
 if proc.returncode == 0:
-    st.session_state["result"] = {"success": True, "html_path": html_path}
+    st.session_state["result"] = {
+        "success": True,
+        "html_path": html_path,
+        "risk_register_path": risk_register_path,
+    }
     st.success("✅ Charter generated successfully!")
 
     if html_path and Path(html_path).exists():
         c1, c2 = st.columns([5, 1])
         c1.code(html_path)
-        if c2.button("🌐 Open in Browser", key="open_new"):
+        if c2.button("🌐 Open Charter", key="open_new"):
             webbrowser.open(Path(html_path).as_uri())
         webbrowser.open(Path(html_path).as_uri())
     else:
         st.warning(f"Expected output not found at: {OUTPUT_FILE}")
+
+    if risk_register_path and Path(risk_register_path).exists():
+        r1, r2 = st.columns([5, 1])
+        r1.code(risk_register_path)
+        if r2.button("📊 Open Register", key="open_rr_new"):
+            webbrowser.open(Path(risk_register_path).as_uri())
+        webbrowser.open(Path(risk_register_path).as_uri())
 else:
     st.session_state["result"] = {"success": False, "returncode": proc.returncode}
     st.error(f"Processing failed with exit code `{proc.returncode}`.")

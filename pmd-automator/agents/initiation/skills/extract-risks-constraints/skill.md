@@ -6,6 +6,11 @@ description: >-
   the user asks to build, create, or set up a risk register, risk log, or risk management
   document for project initiation.
 disable-model-invocation: true
+outputs:
+  - path: common/input/snippets/risks_constraints.md
+    description: Risks & Constraints snippet embedded into the Project Charter
+  - path: shared_output/Risk_Register.html
+    description: Standalone high-level risk register opened automatically after processing
 ---
 
 # PMP Risk Register Builder
@@ -136,18 +141,18 @@ Extract minimum 8-12 risks from the SOW, stakeholder analysis, and project const
 
 **Output Format:**
 
-Save the generated file with the following naming convention:
+This skill produces two outputs on every run:
 
-```
-[ProjectName]_Risk_Register_v[VERSION].xlsx
-```
+| Output | Path | Purpose |
+|--------|------|---------|
+| Snippet | `common/input/snippets/risks_constraints.md` | Section 6 embedded into `Project_Charter.html` |
+| Risk Register | `shared_output/Risk_Register.html` | Standalone HTML opened automatically in a new browser tab after processing |
 
-Example: `SmartLife_Mobile_App_Risk_Register_v1.0.xlsx`
-
-**Delivery Location:**
-
-* **Output Directory:** `04_final_deliverables/` (per project architecture in CLAUDE.md)
-* **Working Location:** `02_working_docs/` (for drafts and revisions)
+The risk register HTML contains:
+- A summary bar (total, Critical, High, Medium, Low counts)
+- A full risk table with columns: Risk ID · Category · Description · Source · Impact · Probability · Score · Priority · Mitigation
+- Rows derived from Section 6a (Constraints), 6b (NFRs), and 6c (Evaluation Criteria)
+- Color-coded priority badges (Critical = red, High = orange, Medium = amber, Low = green)
 
 **Deliverable Summary:**
 
