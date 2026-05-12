@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>High-Level Risk Register</title>
+  <style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+  font-size: 13px; color: #1a1a2e; background: #f4f6fb; line-height: 1.5;
+}
+.page {
+  max-width: 1280px; margin: 32px auto; background: #fff;
+  border-radius: 8px; box-shadow: 0 2px 16px rgba(0,0,0,.12); overflow: hidden;
+}
+header {
+  background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+  color: #fff; padding: 28px 48px 22px;
+}
+header h1 { font-size: 22px; font-weight: 700; letter-spacing: .5px; }
+header .meta { margin-top: 8px; font-size: 12px; opacity: .82; }
+header .meta span { margin-right: 24px; }
+.badge-draft {
+  display: inline-block; background: #e94560; color: #fff;
+  font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 12px;
+  text-transform: uppercase; letter-spacing: .6px; margin-left: 10px;
+  vertical-align: middle;
+}
+main { padding: 24px 32px 48px; }
+.summary {
+  display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.summary-card {
+  flex: 1; min-width: 120px; background: #f7f9fc;
+  border: 1px solid #e2e8f0; border-radius: 6px;
+  padding: 12px 16px; text-align: center;
+}
+.summary-card .count { font-size: 26px; font-weight: 700; color: #0f3460; }
+.summary-card .label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: .5px; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+thead { background: #0f3460; color: #fff; }
+thead th { padding: 10px 12px; text-align: left; font-weight: 600; white-space: nowrap; }
+tbody tr:nth-child(even) { background: #f7f9fc; }
+tbody tr:hover { background: #eef2ff; }
+tbody td { padding: 8px 12px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+.risk-id { font-weight: 700; color: #0f3460; white-space: nowrap; font-family: monospace; }
+.badge {
+  display: inline-block; color: #fff; font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 10px; text-transform: uppercase;
+  letter-spacing: .5px; white-space: nowrap;
+}
+footer {
+  background: #f8fafc; border-top: 1px solid #e2e8f0;
+  padding: 12px 32px; font-size: 11px; color: #94a3b8;
+  display: flex; justify-content: space-between;
+}
+@media print {
+  body { background: #fff; }
+  .page { box-shadow: none; margin: 0; border-radius: 0; }
+}
+</style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>High-Level Risk Register<span class="badge-draft">Draft</span></h1>
+      <div class="meta">
+        <span>📋 PMO Automator</span>
+        <span>📅 12 May 2026, 18:04 UTC</span>
+        <span>👤 Riyaz Kallayimmel, PMP</span>
+      </div>
+    </header>
+    <main>
+      <div class="summary"><div class="summary-card"><div class="count">9</div><div class="label">Total Risks</div></div><div class="summary-card"><div class="count" style="color:#c0392b">3</div><div class="label">Critical</div></div><div class="summary-card"><div class="count" style="color:#e67e22">5</div><div class="label">High</div></div><div class="summary-card"><div class="count" style="color:#f39c12">1</div><div class="label">Medium</div></div><div class="summary-card"><div class="count" style="color:#27ae60">0</div><div class="label">Low</div></div></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Risk ID</th><th>Category</th><th>Risk Description</th><th>Source</th>
+            <th>Impact</th><th>Probability</th><th>Score</th><th>Priority</th><th>Mitigation</th>
+          </tr></thead>
+          <tbody><tr><td class="risk-id">RISK-001</td><td>Schedule</td><td>Timeline: ** Fixed 6-month delivery window.</td><td>Project Constraints</td><td>High</td><td>High</td><td style="text-align:center;font-weight:700">16</td><td><span class="badge" style="background:#c0392b">Critical</span></td><td>Define realistic milestones; add buffer weeks at phase boundaries</td></tr><tr><td class="risk-id">RISK-002</td><td>Budget</td><td>Budget: ** Total cost must not exceed USD 450,000.</td><td>Project Constraints</td><td>High</td><td>Medium</td><td style="text-align:center;font-weight:700">12</td><td><span class="badge" style="background:#c0392b">Critical</span></td><td>Track spend weekly; escalate at 80% threshold</td></tr><tr><td class="risk-id">RISK-003</td><td>Technical</td><td>Parity: ** Complete feature parity between iOS and Android is mandatory.</td><td>Project Constraints</td><td>Medium</td><td>Medium</td><td style="text-align:center;font-weight:700">9</td><td><span class="badge" style="background:#e67e22">High</span></td><td>Shared business logic layer; platform-specific UI only</td></tr><tr><td class="risk-id">RISK-004</td><td>Compliance/Security</td><td>Security: ** JWT Authentication and 80%+ code coverage for automated testing.</td><td>Non-Functional Requirements</td><td>High</td><td>Medium</td><td style="text-align:center;font-weight:700">12</td><td><span class="badge" style="background:#c0392b">Critical</span></td><td>Enforce 80%+ test coverage gates; run SAST in CI</td></tr><tr><td class="risk-id">RISK-005</td><td>Compliance/Security</td><td>Compliance: ** Data must be encrypted at rest and in transit.</td><td>Non-Functional Requirements</td><td>High</td><td>Low</td><td style="text-align:center;font-weight:700">8</td><td><span class="badge" style="background:#f39c12">Medium</span></td><td>Implement encryption standards; conduct compliance review pre-launch</td></tr><tr><td class="risk-id">RISK-006</td><td>Technical</td><td>Performance: ** API response time under 200 ms.</td><td>Non-Functional Requirements</td><td>Medium</td><td>Medium</td><td style="text-align:center;font-weight:700">9</td><td><span class="badge" style="background:#e67e22">High</span></td><td>Load test at each milestone; set SLA thresholds in CI</td></tr><tr><td class="risk-id">RISK-007</td><td>Stakeholder</td><td>Technical: Expertise:** Native development proficiency (Swift and Kotlin).</td><td>Evaluation Criteria</td><td>Medium</td><td>Medium</td><td style="text-align:center;font-weight:700">9</td><td><span class="badge" style="background:#e67e22">High</span></td><td>Align expectations early; schedule demo checkpoints</td></tr><tr><td class="risk-id">RISK-008</td><td>Stakeholder</td><td>AI: Model Robustness:** Quality of the proposed health-risk prediction model.</td><td>Evaluation Criteria</td><td>Medium</td><td>Medium</td><td style="text-align:center;font-weight:700">9</td><td><span class="badge" style="background:#e67e22">High</span></td><td>Align expectations early; schedule demo checkpoints</td></tr><tr><td class="risk-id">RISK-009</td><td>Stakeholder</td><td>Timeline: & Budget:** Ability to deliver within a 24-week timeline and $450,000 budget.</td><td>Evaluation Criteria</td><td>Medium</td><td>Medium</td><td style="text-align:center;font-weight:700">9</td><td><span class="badge" style="background:#e67e22">High</span></td><td>Align expectations early; schedule demo checkpoints</td></tr></tbody>
+        </table>
+      </div>
+    </main>
+    <footer>
+      <span>PMO Automator — High-Level Risk Register (extract-risks-constraints v3)</span>
+      <span>Generated 12 May 2026, 18:04 UTC</span>
+    </footer>
+  </div>
+</body>
+</html>

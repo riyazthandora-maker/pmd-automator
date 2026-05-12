@@ -1,6 +1,6 @@
 ---
 skill: milestones_finance
-extracted_at: 2026-05-11T09:50:26.089637+00:00
+extracted_at: 2026-05-12T18:04:25.042014+00:00
 ---
 
 ## 5. Summary Milestone Schedule & Payment Terms

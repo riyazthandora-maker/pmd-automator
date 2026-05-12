@@ -1,6 +1,6 @@
 ---
 skill: stakeholders_gov
-extracted_at: 2026-05-11T09:50:26.088753+00:00
+extracted_at: 2026-05-12T18:04:25.042014+00:00
 ---
 
 ## 7. Governance & Authority
