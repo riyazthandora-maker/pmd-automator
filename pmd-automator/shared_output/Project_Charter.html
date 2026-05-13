@@ -5,77 +5,92 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Project Charter</title>
   <style>
+:root {
+  --primary: #007560; --primary-variant: #004937;
+  --primary-tint: #D9EAE7; --primary-tint-soft: #E5F1EF;
+  --accent-orange: #E26D5A;
+  --grey-100: #EFEFF1; --grey-150: #F2F3F3; --grey-200: #D7D7DF;
+  --grey-300: #BDBDBD; --grey-600: #6F6F6F; --grey-900: #222222;
+  --warn-bg: #FCF5E7; --warn-border: #C28B14; --warn-text: #7B5A0F;
+  --font: -apple-system, "SF Pro Display", "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+  --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+}
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  font-family: 'Segoe UI', Calibri, Arial, sans-serif;
-  font-size: 14px; color: #1a1a2e; background: #f4f6fb; line-height: 1.65;
+  font-family: var(--font);
+  font-size: 14px; color: var(--grey-900); background: #E9EAEC; line-height: 1.65;
 }
 .page {
   max-width: 960px; margin: 32px auto; background: #fff;
-  border-radius: 8px; box-shadow: 0 2px 16px rgba(0,0,0,.12); overflow: hidden;
+  border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 8px 28px rgba(0,0,0,.10); overflow: hidden;
 }
 header {
-  background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+  background: linear-gradient(to bottom, var(--primary) 0%, var(--primary-variant) 100%);
   color: #fff; padding: 36px 48px 28px;
 }
 header h1 { font-size: 26px; font-weight: 700; letter-spacing: .5px; }
 header .meta { margin-top: 10px; font-size: 13px; opacity: .82; }
 header .meta span { margin-right: 24px; }
 .badge {
-  display: inline-block; background: #e94560; color: #fff;
+  display: inline-block; background: var(--accent-orange); color: #fff;
   font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 12px;
   text-transform: uppercase; letter-spacing: .6px; margin-left: 10px;
   vertical-align: middle;
 }
 main { padding: 0 48px 48px; }
 .section-card {
-  margin-top: 32px; border: 1px solid #e2e8f0; border-radius: 6px; overflow: hidden;
+  margin-top: 32px; border: 1px solid var(--grey-200); border-radius: 6px; overflow: hidden;
 }
 .section-title {
-  background: #0f3460; color: #fff; padding: 10px 20px;
+  background: var(--primary); color: #fff; padding: 10px 20px;
   font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px;
 }
 .section-body { padding: 20px 24px; }
 h2.section-heading { display: none; }
 h3.sub-heading {
-  font-size: 13px; font-weight: 700; color: #0f3460;
-  margin: 18px 0 8px; padding-bottom: 4px; border-bottom: 1px solid #e2e8f0;
+  font-size: 13px; font-weight: 700; color: var(--primary);
+  margin: 18px 0 8px; padding-bottom: 4px; border-bottom: 1px solid var(--grey-100);
 }
 p { margin: 6px 0; }
 ul, ol { margin: 6px 0 6px 20px; }
 li { margin: 3px 0; }
 .table-wrap { overflow-x: auto; margin: 10px 0; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
-thead { background: #0f3460; color: #fff; }
-thead th { padding: 8px 12px; text-align: left; font-weight: 600; }
-tbody tr:nth-child(even) { background: #f7f9fc; }
-tbody td { padding: 7px 12px; border-bottom: 1px solid #e2e8f0; }
-code { background: #f1f5f9; padding: 1px 5px; border-radius: 3px; font-size: 12px; }
+thead { background: var(--primary); color: #fff; }
+thead th { padding: 8px 12px; text-align: left; font-weight: 600;
+  font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+tbody tr:nth-child(even) { background: #FAFAFB; }
+tbody td { padding: 7px 12px; border-bottom: 1px solid var(--grey-100); }
+code { background: var(--grey-150); padding: 1px 5px; border-radius: 3px; font-size: 12px; font-family: var(--mono); }
 strong { font-weight: 700; }
 .not-found {
-  background: #fff8e1; border-left: 4px solid #f9a825;
-  padding: 10px 14px; font-size: 13px; color: #795548;
+  background: var(--warn-bg); border-left: 4px solid var(--warn-border);
+  padding: 10px 14px; font-size: 13px; color: var(--warn-text);
   border-radius: 0 4px 4px 0; margin: 8px 0;
 }
 .sign-off-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 8px; }
-.sign-box { border: 1px solid #cbd5e1; border-radius: 4px; padding: 16px; }
+.sign-box { border: 1px solid var(--grey-200); border-radius: 4px; padding: 16px; }
 .sign-box .role {
-  font-weight: 700; font-size: 12px; color: #0f3460;
+  font-weight: 700; font-size: 12px; color: var(--primary);
   text-transform: uppercase; letter-spacing: .5px;
 }
 .sign-box .name { margin: 4px 0 20px; font-size: 14px; }
 .sign-line {
-  border-top: 1px solid #94a3b8; margin-top: 20px;
-  font-size: 11px; color: #94a3b8; padding-top: 4px;
+  border-top: 1px solid var(--grey-300); margin-top: 20px;
+  font-size: 11px; color: var(--grey-600); padding-top: 4px;
 }
 footer {
-  background: #f8fafc; border-top: 1px solid #e2e8f0;
-  padding: 14px 48px; font-size: 11px; color: #94a3b8;
+  background: var(--grey-150); border-top: 1px solid var(--grey-100);
+  padding: 14px 48px; font-size: 11px; color: var(--grey-600);
   display: flex; justify-content: space-between;
 }
 @media print {
   body { background: #fff; }
   .page { box-shadow: none; margin: 0; border-radius: 0; }
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
 }
 </style>
 </head>
@@ -85,7 +100,7 @@ footer {
       <h1>Project Charter<span class="badge">Draft</span></h1>
       <div class="meta">
         <span>📋 PMO Automator</span>
-        <span>📅 12 May 2026, 18:04 UTC</span>
+        <span>📅 12 May 2026, 18:30 UTC</span>
         <span>👤 Riyaz Kallayimmel, PMP</span>
       </div>
     </header>
@@ -94,7 +109,7 @@ footer {
 <tr><td><strong>Document</strong></td><td>Project Charter</td></tr>
 <tr><td><strong>Status</strong></td><td>DRAFT — Pending Approval</td></tr>
 <tr><td><strong>Version</strong></td><td>v1</td></tr>
-<tr><td><strong>Generated</strong></td><td>12 May 2026, 18:04 UTC</td></tr>
+<tr><td><strong>Generated</strong></td><td>12 May 2026, 18:30 UTC</td></tr>
 <tr><td><strong>Prepared by</strong></td><td>Riyaz Kallayimmel, PMP</td></tr>
 </tbody></table></div></div></div><div class="section-card"><div class="section-title">2–4. Scope, Objectives & Requirements</div><div class="section-body"><h2 class="section-heading">2. Project Purpose & Business Case</h2>
 <h2 class="section-heading">A. Background & Context</h2>
@@ -200,7 +215,7 @@ footer {
 </div></div></main>
     <footer>
       <span>PMO Automator — Centralized Initiation Engine v3</span>
-      <span>Generated 12 May 2026, 18:04 UTC</span>
+      <span>Generated 12 May 2026, 18:30 UTC</span>
     </footer>
   </div>
 </body>

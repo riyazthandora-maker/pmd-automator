@@ -1,6 +1,6 @@
 ---
 skill: scope_obj
-extracted_at: 2026-05-12T18:04:25.039580+00:00
+extracted_at: 2026-05-12T18:30:10.014993+00:00
 ---
 
 ## 2. Project Purpose & Business Case
