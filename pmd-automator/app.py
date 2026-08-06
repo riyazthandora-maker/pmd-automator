@@ -132,6 +132,7 @@ if not already_running:
 # The engine runs directly against /common/input/ files.
 STAGE_LABELS = {
     # "ingestion":  "Ingestion",    # SUSPENDED
+    "preflight":  "Pre-flight Checks",
     # "validation": "Validation",   # SUSPENDED
     "extraction": "Extraction (parallel)",
     "assembly":   "HTML Assembly",
